@@ -6,3 +6,5 @@ in `utils/formatters/schedule.py`, DAYS in `handlers/calendar.py`)
 which gets a data from the API and change the code in
 `handlers/schedule.py`
 3. Create WebHook
+4. If needed, create a `utils/exceptions` folder. Move there 
+function `role_not_found` from `handlers/register/role_selection.py`

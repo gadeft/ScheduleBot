@@ -2,8 +2,8 @@ from aiogram import Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters.command import Command
 
-from utils.formatters.basic_commands import *
-from utils.keyboards.main_kb import *
+from src.utils.formatters.basic_commands import *
+from src.utils.keyboards.main_kb import *
 
 
 router = Router()

@@ -1,16 +1,13 @@
 from datetime import date
-from traceback import print_tb
 
 from aiogram import Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters.command import Command
 import requests
 
-from utils.formatters.schedule import *
-from utils.parser import parser
-from db import db
-from api.v1 import *
-
+from src.utils.formatters.schedule import *
+from src.utils.parser import parser
+from src.database import db
 
 router = Router()
 

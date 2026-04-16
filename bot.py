@@ -1,36 +1,19 @@
-import os
 import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher, types
 from aiogram_dialog import setup_dialogs
-from dotenv import load_dotenv
 
-from handlers import basic_commands
-from handlers import schedule
-from handlers import calendar
-from handlers import chooseday
+from src.handlers import chooseday, calendar, schedule, register
+from src.loader import bot, dp, db, commands
 
 
 logging.basicConfig(level=logging.INFO)
 
-load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-
-bot = Bot(BOT_TOKEN)
-dp = Dispatcher()
-
-commands = [
-    types.BotCommand(command="help", description="List of commands"),
-    types.BotCommand(command="week", description="Get the week schedule"),
-    types.BotCommand(command="today", description="Get the today schedule"),
-    types.BotCommand(command="tomorrow", description="Get the tomorrow schedule"),
-    types.BotCommand(command="yesterday", description="Get the yesterday schedule"),
-    types.BotCommand(command="specific_day", description="Get the specific day schedule"),
-]
 
 async def main():
-    dp.include_router(basic_commands.router)
+    dp.include_router(register.router)
+
+    # dp.include_router(basic_commands.router)
     dp.include_router(calendar.router)
     dp.include_router(schedule.router)
     dp.include_router(chooseday.router)
@@ -41,8 +24,15 @@ async def main():
 
     await bot.set_my_commands(commands)
 
+    await db.connect()
+    await db.create_students_table()
+    await db.create_lecturers_table()
+
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
+
+    await db.close()
+
 
 if __name__ == '__main__':
     asyncio.run(main())

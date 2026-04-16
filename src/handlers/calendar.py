@@ -14,7 +14,7 @@ from aiogram.types import Message
 from aiogram.filters.command import Command
 from aiogram.enums import ParseMode
 
-from utils.formatters.schedule import day_lessons
+from src.utils.formatters.schedule import day_lessons
 
 
 DAYS = {

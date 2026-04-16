@@ -3,8 +3,8 @@ import os
 import httpx
 from dotenv import load_dotenv
 
-from api.v1.urls import urls
-from api.v1.urls import Url
+from src.api.v1.urls import urls
+from src.api.v1.urls import Url
 
 
 load_dotenv()
