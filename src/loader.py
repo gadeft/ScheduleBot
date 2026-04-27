@@ -3,15 +3,21 @@ import os
 from aiogram import Bot, Dispatcher, types
 from dotenv import load_dotenv
 
-from src.database.db import Database
+from src.db.engine import engine
+from src.db.base import Base
 
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
+
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
 bot = Bot(BOT_TOKEN)
 dp = Dispatcher()
-db = Database()
 
 commands = [
     types.BotCommand(command="help", description="List of commands"),

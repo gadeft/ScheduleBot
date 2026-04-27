@@ -7,7 +7,7 @@ from aiogram.fsm.context import FSMContext
 
 from aiogram_dialog import DialogManager
 
-from src.handlers import calendar
+from old import calendar
 
 
 class ChooseDay(StatesGroup):

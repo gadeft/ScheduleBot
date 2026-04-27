@@ -3,12 +3,14 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 from aiogram.enums import ParseMode
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from src.utils.keyboards.register import get_vertical_kb
 from src.utils.callbacks.register import FacultyCD, CourseCD, GroupNumberCD
 from src.utils.formatters.register import (
     TEXT, TEXT_TEMPLATES, FACULTIES, COURSES, GROUPS_PER_COURSE, student_finish_text
 )
-from src.loader import db
+from src.db.repo import make_user_student
 
 
 router = Router()
@@ -54,7 +56,7 @@ async def choose_group(query: CallbackQuery, state: FSMContext, callback_data: C
 
 
 @router.callback_query(GroupNumberCD.filter())
-async def student_finish(query: CallbackQuery, state: FSMContext, callback_data: GroupNumberCD):
+async def student_finish(query: CallbackQuery, state: FSMContext, callback_data: GroupNumberCD, session: AsyncSession):
     await query.answer()
 
     await state.update_data(group=callback_data.value)
@@ -67,4 +69,5 @@ async def student_finish(query: CallbackQuery, state: FSMContext, callback_data:
 
     await state.clear()
 
-    await db.upsert_student(telegram_id=query.message.chat.id, group_id=10) # TODO: get group_id from API
+    # TODO: get group_id from API
+    await make_user_student(session, query.from_user.id, group_id=8)

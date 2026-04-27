@@ -1,24 +1,28 @@
+version: "1.0"
+
 services:
-  bot:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file: ".env"
-    depends_on:
-      - db
-#    restart: unless-stopped
 
   db:
-    image: postgres:16-alpine
+    image: postgres:16
+    container_name: bot_postgres
+    restart: always
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: bot_db
+      POSTGRES_USER: bot_user
+      POSTGRES_PASSWORD: bot_pass
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+
+  bot:
+    build: .
+    container_name: schedule_bot
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
 
 volumes:
-  pgdata:
-
+  postgres_data:

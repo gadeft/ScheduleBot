@@ -7,7 +7,6 @@ import requests
 
 from src.utils.formatters.schedule import *
 from src.utils.parser import parser
-from src.database import db
 
 router = Router()
 
@@ -35,10 +34,10 @@ async def week(message: types.Message):
 async def today(message: types.Message):
     today_weekday = date.today().isoweekday()
 
-    user_data = db.get_by_id(message.from_user.id)
+    # user_data = db.get_by_id(message.from_user.id)
 
-    raw_data = await get_schedule(day_id=today_weekday, week_id=2, group_id=8)
-    parsed_data = parser.parse(raw_data)
+    # raw_data = await get_schedule(day_id=today_weekday, week_id=2, group_id=8)
+    # parsed_data = parser.parse(raw_data)
     answer = today_lessons(parsed_data["ІПЗ-32"][2]["Четвер"]) # TODO: take data from database according user id
 
     await message.answer(answer, parse_mode=ParseMode.HTML)

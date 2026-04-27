@@ -3,13 +3,15 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 from aiogram.enums import ParseMode
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from src.utils.keyboards.register import get_vertical_kb
 from src.utils.callbacks.register import TeacherCD
 from src.utils.states.register import RegisterSG
 from src.utils.formatters.register import (
     TEXT, TEXT_TEMPLATES, TEACHERS, teacher_finish_text
 )
-from src.loader import db
+from src.db.repo import make_user_lecturer
 
 
 router = Router()
@@ -42,7 +44,7 @@ async def choose_teacher(message: Message, state: FSMContext):
 
 
 @router.callback_query(TeacherCD.filter())
-async def teacher_finish(query: CallbackQuery, state: FSMContext, callback_data: TeacherCD):
+async def teacher_finish(query: CallbackQuery, state: FSMContext, callback_data: TeacherCD, session: AsyncSession):
     await query.answer()
 
     await state.update_data(teacher=callback_data.value)
@@ -55,4 +57,5 @@ async def teacher_finish(query: CallbackQuery, state: FSMContext, callback_data:
 
     await state.clear()
 
-    await db.upsert_lecturer(telegram_id=query.message.chat.id, lecturer_id=8)  # TODO: get lecturer_id from API
+    # TODO: get lecturer_id from API
+    await make_user_lecturer(session, query.from_user.id, lecturer_id=33)
